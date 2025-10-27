@@ -1,0 +1,16 @@
+[project]
+name = "finam-mcp"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = "==3.12.6"
+dependencies = [
+    "fastmcp>=2.12.4",
+    "finam-trade-api>=4.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "python-dotenv>=1.1.1",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+]

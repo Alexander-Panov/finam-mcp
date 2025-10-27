@@ -1,0 +1,12 @@
+src/tradeapi/client
+src/tradeapi/examples
+src/tradeapi/protos
+
+/.env
+/.venv
+/.idea
+
+CLAUDE.md
+LOCAL.md
+
+*.pyc*
