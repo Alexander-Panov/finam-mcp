@@ -4,6 +4,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from tradeapi.models import Symbol
+
 
 class Side(str, Enum):
     """Сторона сделки"""
@@ -84,14 +86,14 @@ class OrderStatus(str, Enum):
 
 class Leg(BaseModel):
     """Лег для мульти лег заявки"""
-    symbol: str = Field(..., description="Символ инструмента")
+    symbol: Symbol
     quantity: Decimal = Field(..., description="Количество")
     side: Side = Field(..., description="Сторона")
 
 
 class Order(BaseModel):
     """Информация о заявке"""
-    symbol: str = Field(description="Символ инструмента")
+    symbol: Symbol
     quantity: Decimal = Field(description="Количество в шт.")
     side: Side = Field(description="Сторона (long или short)")
     type: OrderType = Field(description="Тип заявки")

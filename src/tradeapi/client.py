@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from finam_trade_api import Client, TokenManager, ErrorModel, FinamTradeApiError
 from finam_trade_api.account import GetTransactionsRequest
 from finam_trade_api.assets import AssetsResponse
 from finam_trade_api.instruments import BarsRequest, TimeFrame
 
-from src.tradeapi.order.orders import OrderClient
 from src.tradeapi.models import GetTradesRequest, AssetParamsResponse
+from src.tradeapi.order.orders import OrderClient
 
 
 class FinamClient:
@@ -69,17 +71,17 @@ class FinamClient:
         return await self.client.assets.get_exchanges()
 
     async def get_options_chain(self, underlying_symbol: str):
-        return await self.client.assets.get_options_chain()
+        return await self.client.assets.get_options_chain(underlying_symbol)
 
     async def get_schedule(self, symbol: str):
         return await self.client.assets.get_schedule(symbol)
 
     """ Market Data """
 
-    async def get_bars(self, symbol: str, start_time: str, end_time: str,
+    async def get_bars(self, symbol: str, start_time: datetime, end_time: datetime,
                        timeframe: TimeFrame):
         return await self.client.instruments.get_bars(
-            BarsRequest(symbol=symbol, start_time=start_time, end_time=end_time, timeframe=timeframe))
+            BarsRequest(symbol=symbol, start_time=start_time.isoformat(), end_time=end_time.isoformat(), timeframe=timeframe))
 
     async def get_last_quote(self, symbol: str):
         return await self.client.instruments.get_last_quote(symbol)

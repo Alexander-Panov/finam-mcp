@@ -6,6 +6,8 @@ src/tradeapi/protos
 /.venv
 /.idea
 
+/.claude
+
 CLAUDE.md
 LOCAL.md
 
