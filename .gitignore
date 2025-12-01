@@ -1,6 +1,4 @@
-src/tradeapi/client
-src/tradeapi/examples
-src/tradeapi/protos
+/local/
 
 /.env
 /.venv

@@ -1,10 +1,7 @@
 import pytest
-from dotenv import load_dotenv
 from fastmcp import Client
 
 from src.main import finam_mcp
-
-load_dotenv()  # чтобы работали заголовки
 
 
 @pytest.fixture(scope="function")
@@ -21,5 +18,5 @@ async def mcp_client():
 TEST_STOCK_SYMBOLS_RU = ["YDEX@MISX", "SBER@MISX"]
 TEST_STOCK_SYMBOLS_US = ["AAPL@XNGS", "SPY@ARCX", "KO@XNYS"]
 
-TEST_STOCK_SYMBOLS = TEST_STOCK_SYMBOLS_US
+TEST_STOCK_SYMBOLS = TEST_STOCK_SYMBOLS_RU
 TEST_INVALID_SYMBOL = "INVALID@SYMBOL"

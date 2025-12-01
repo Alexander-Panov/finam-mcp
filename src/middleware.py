@@ -1,9 +1,8 @@
-import os
-
 from fastmcp.exceptions import ToolError
 from fastmcp.server.dependencies import get_http_headers
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 
+from conifg import settings
 from src.tradeapi.client import FinamClient
 
 
@@ -17,8 +16,8 @@ class FinamCredentialsMiddleware(Middleware):
         headers = get_http_headers()
 
         # Извлекаем необходимые заголовки
-        api_key = headers.get("finam-api-key") or os.getenv("FINAM_API_KEY")
-        account_id = headers.get("finam-account-id") or os.getenv("FINAM_ACCOUNT_ID")
+        api_key = headers.get("finam-api-key") or settings.FINAM_API_KEY
+        account_id = headers.get("finam-account-id") or settings.FINAM_ACCOUNT_ID
 
         # Проверяем наличие обязательных заголовков
         if not api_key or not account_id:

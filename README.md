@@ -57,6 +57,46 @@ npx @modelcontextprotocol/inspector
 
 ![Headers](images/headers.png)
 
+#### Установка Claude Desktop
+
+Для интеграции с Claude Desktop добавьте конфигурацию в файл настроек:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "Finam": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "fastmcp",
+        "--with",
+        "finam-trade-api",
+        "fastmcp",
+        "run",
+        "src/main.py:finam_mcp"
+      ],
+      "env": {
+        "PYTHONPATH": "/путь/к/проекту/finam-mcp",
+        "FINAM_API_KEY": "ваш-api-ключ",
+        "FINAM_ACCOUNT_ID": "ваш-account-id",
+        "INCLUDE_SERVERS": "market_data"
+      }
+    }
+  }
+}
+```
+
+**Параметры конфигурации:**
+- `PYTHONPATH` - абсолютный путь к директории проекта
+- `FINAM_API_KEY` - ваш API ключ из личного кабинета Finam
+- `FINAM_ACCOUNT_ID` - ID вашего торгового счёта
+- `INCLUDE_SERVERS` - список серверов через запятую: `account`, `assets`, `market_data`, `order` (необязательно, по умолчанию включены все)
+
+После изменения конфигурации перезапустите Claude Desktop.
 
 ## Аутентификация
 

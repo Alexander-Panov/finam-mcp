@@ -1,13 +1,14 @@
 from fastmcp import FastMCP
 from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 
+from conifg import settings
 from src.middleware import FinamCredentialsMiddleware
 from src.servers.account import account_mcp
 from src.servers.assets import assets_mcp
 from src.servers.market_data import market_data_mcp
 from src.servers.order import order_mcp
 
-finam_mcp = FastMCP("FinamMCP")
+finam_mcp = FastMCP("FinamMCP", include_tags=settings.INCLUDE_SERVERS)
 finam_mcp.mount(account_mcp, prefix="account")
 finam_mcp.mount(market_data_mcp, prefix="market_data")
 finam_mcp.mount(assets_mcp, prefix="assets")
