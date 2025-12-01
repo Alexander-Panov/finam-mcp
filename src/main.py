@@ -1,4 +1,5 @@
 from fastmcp import FastMCP
+from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 
 from src.middleware import FinamCredentialsMiddleware
 from src.servers.account import account_mcp
@@ -13,6 +14,7 @@ finam_mcp.mount(assets_mcp, prefix="assets")
 finam_mcp.mount(order_mcp, prefix="order")
 
 finam_mcp.add_middleware(FinamCredentialsMiddleware())
+finam_mcp.add_middleware(ErrorHandlingMiddleware())
 
 if __name__ == "__main__":
     finam_mcp.run(transport="http", host="127.0.0.1", port=3000)

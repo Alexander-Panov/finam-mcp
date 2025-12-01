@@ -3,8 +3,7 @@ import pytest
 from finam_trade_api.instruments import TimeFrame, BarsResponse, QuoteResponse, OrderBookResponse, TradesResponse
 from finam_trade_api.assets import OptionsChainResponse
 
-from tests.conftest import TEST_STOCK_SYMBOLS, TEST_INVALID_SYMBOL
-
+from tests.conftest import TEST_INVALID_SYMBOL, TEST_STOCK_SYMBOLS
 
 @pytest.mark.parametrize("symbol", TEST_STOCK_SYMBOLS)
 async def test_get_bars(mcp_client, symbol):

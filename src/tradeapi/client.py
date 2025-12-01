@@ -41,7 +41,7 @@ class FinamClient:
         assets_client = self.client.assets
         response, ok = await assets_client._exec_request(
             assets_client.RequestMethod.GET,
-            f"{assets_client._url}",
+            f"{assets_client._url}"
         )
 
         if not ok:

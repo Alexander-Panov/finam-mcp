@@ -51,9 +51,11 @@ MCP Inspector позволяет интерактивно тестировать
 npx @modelcontextprotocol/inspector
 ```
 
-Подключаемся к серверу используя адрес: "http://localhost:3000/mcp"
+Подключаемся к серверу используя адрес: "http://localhost:3000/mcp" и вставляя заголовки ключа Finam API и Account ID
 
 ![MCP Inspector](images/mcp_inspector.png)
+
+![Headers](images/headers.png)
 
 
 ## Аутентификация
