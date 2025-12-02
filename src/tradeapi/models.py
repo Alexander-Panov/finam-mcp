@@ -1,11 +1,11 @@
 from typing import Annotated
 
-from finam_trade_api.account import GetTransactionsRequest
+from finam_trade_api.account import GetTransactionsRequest, Position
 from finam_trade_api.assets.model import Status
 from finam_trade_api.base_client import FinamDecimal, FinamMoney
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AwareDatetime
 
-Symbol: type[str]  = Annotated[
+Symbol: type[str] = Annotated[
     str,
     Field(
         description="symbol в формате: SYMBOL@MIC (например, YDEX@MISX)",
@@ -14,11 +14,13 @@ Symbol: type[str]  = Annotated[
     )
 ]
 
+
 class GetTradesRequest(GetTransactionsRequest):
     account_id: str
     start_time: str
     end_time: str
     limit: int
+
 
 class AssetParamsResponse(BaseModel):
     symbol: Symbol
@@ -30,3 +32,15 @@ class AssetParamsResponse(BaseModel):
     long_collateral: FinamMoney | None = None
     short_risk_rate: FinamDecimal | None = None
     short_collateral: FinamMoney | None = None
+
+
+class GetAccountResponse(BaseModel):
+    account_id: str
+    type: str
+    status: str
+    positions: list[Position] = Field(default_factory=list)
+    cash: list[FinamMoney] = Field(default_factory=list)
+    open_account_date: AwareDatetime
+    first_non_trade_date: AwareDatetime
+    equity: FinamDecimal | None = None
+    unrealized_profit: FinamDecimal | None = None
