@@ -4,7 +4,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from tradeapi.models import Symbol
+from src.tradeapi.models import Symbol
 
 
 class Side(str, Enum):

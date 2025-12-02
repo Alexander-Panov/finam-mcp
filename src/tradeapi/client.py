@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from finam_trade_api import Client, TokenManager, ErrorModel, FinamTradeApiError
+from finam_trade_api import Client, TokenManager, ErrorModel
 from finam_trade_api.account import GetTransactionsRequest
 from finam_trade_api.assets import AssetsResponse
 from finam_trade_api.base_client import BaseClient
-from finam_trade_api.instruments import BarsRequest, TimeFrame, TradesResponse, OrderBookResponse, QuoteResponse, \
+from finam_trade_api.instruments import TimeFrame, TradesResponse, OrderBookResponse, QuoteResponse, \
     BarsResponse
 from mcp.server.fastmcp.exceptions import ToolError
 

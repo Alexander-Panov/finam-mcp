@@ -1,4 +1,5 @@
 /local/
+/src/tradeapi/docs/
 
 /.env
 /.venv

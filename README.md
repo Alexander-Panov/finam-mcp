@@ -40,7 +40,7 @@ pip install -e .
 
 ```shell
 # Простой запуск через uvicorn
-uvicorn src.main:finam_mcp --port 3000
+uvicorn src.main:finam-mcp --port 3000
 ```
 
 ### Тестирование с MCP Inspector
@@ -77,7 +77,7 @@ npx @modelcontextprotocol/inspector
         "finam-trade-api",
         "fastmcp",
         "run",
-        "src/main.py:finam_mcp"
+        "src/main.py:finam-mcp"
       ],
       "env": {
         "PYTHONPATH": "/путь/к/проекту/finam-mcp",

@@ -1,8 +1,24 @@
 [project]
 name = "finam-mcp"
 version = "0.1.0"
-description = "Finam Trade API MCP server"
-requires-python = "==3.12.6"
+description = "Finam Trade API MCP (Model Context Protocol) server"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Alexander Panov", email = "palehou@gmail.com"},
+]
+maintainers = [
+    {name = "Alexander Panov", email = "palehou@gmail.com"},
+]
+keywords = [
+    "mcp",
+    "finam",
+    "market_data",
+    "trading",
+    "api",
+    "model-context-protocol",
+    "finam-trade-api"
+]
 dependencies = [
     "fastmcp>=2.13.1",
     "finam-trade-api>=4.1.0",
@@ -13,4 +29,29 @@ dev = [
     "python-dotenv>=1.2.1",
     "pytest>=9.0.1",
     "pytest-asyncio>=1.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Alexander-Panov/finam-mcp"
+Documentation = "https://github.com/Alexander-Panov/finam-mcp#readme"
+Repository = "https://github.com/Alexander-Panov/finam-mcp"
+Issues = "https://github.com/Alexander-Panov/finam-mcp/issues"
+Changelog = "https://github.com/Alexander-Panov/finam-mcp/releases"
+
+[project.scripts]
+finam-mcp = "src.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/README.md",
+    "/LICENSE",
 ]
