@@ -1,7 +1,7 @@
 from fastmcp import FastMCP
 from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 
-from config import settings
+from src.config import settings
 from src.middleware import FinamCredentialsMiddleware
 from src.servers.account import account_mcp
 from src.servers.assets import assets_mcp

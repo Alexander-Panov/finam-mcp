@@ -5,7 +5,7 @@ from fastmcp.server.dependencies import get_context
 from finam_trade_api.account import GetTransactionsResponse, GetTradesResponse
 from pydantic import AwareDatetime
 
-from tradeapi.models import GetAccountResponse
+from src.tradeapi.models import GetAccountResponse
 
 account_mcp = FastMCP(name="FinamAccountServer")
 

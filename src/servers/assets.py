@@ -3,7 +3,7 @@ from fastmcp.server.dependencies import get_context
 from finam_trade_api.assets import AssetsResponse, AssetResponse, ExchangesResponse, AssetParamsResponse, \
     ScheduleResponse, OptionsChainResponse
 
-from tradeapi.models import Symbol
+from src.tradeapi.models import Symbol
 
 assets_mcp = FastMCP(name="FinamAssetsServer")
 

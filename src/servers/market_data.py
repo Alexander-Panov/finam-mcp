@@ -6,7 +6,7 @@ from finam_trade_api.assets import OptionsChainResponse
 from finam_trade_api.instruments import BarsResponse, QuoteResponse, OrderBookResponse, TimeFrame, TradesResponse
 from pydantic import AwareDatetime
 
-from tradeapi.models import Symbol
+from src.tradeapi.models import Symbol
 
 market_data_mcp = FastMCP(name="FinamMarketDataServer")
 

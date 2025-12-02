@@ -2,7 +2,7 @@ from fastmcp.exceptions import ToolError
 from fastmcp.server.dependencies import get_http_headers
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 
-from config import settings
+from src.config import settings
 from src.tradeapi.client import FinamClient
 
 

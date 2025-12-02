@@ -1,13 +1,26 @@
 /local/
 /src/tradeapi/docs/
+/dist
+/build
+*.egg-info/
 
 /.env
 /.venv
 /.idea
+.DS_Store
 
 /.claude
 
 CLAUDE.md
 LOCAL.md
 
+# Python cache
 *.pyc*
+__pycache__/
+*.pyo
+*.pyd
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
