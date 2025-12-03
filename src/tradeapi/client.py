@@ -83,12 +83,12 @@ class FinamClient:
                        timeframe: TimeFrame):
         market_client = self.client.instruments
         return BarsResponse(**await self._exec_request(market_client, BaseClient.RequestMethod.GET,
-                                                        f"{market_client._url}/{symbol}/bars",
-                                                        params={
-                                                            "timeframe": timeframe.value,
-                                                            "interval.start_time": start_time.isoformat(),
-                                                            "interval.end_time": end_time.isoformat(),
-                                                        }, ))
+                                                       f"{market_client._url}/{symbol}/bars",
+                                                       params={
+                                                           "timeframe": timeframe.value,
+                                                           "interval.start_time": start_time.isoformat(),
+                                                           "interval.end_time": end_time.isoformat(),
+                                                       }, ))
 
     async def get_last_quote(self, symbol: str):
         market_client = self.client.instruments

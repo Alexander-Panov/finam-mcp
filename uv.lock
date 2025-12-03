@@ -425,7 +425,7 @@ wheels = [
 ]
 
 [[package]]
-name = "finam-mcp"
+name = "finam-mcp-server"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
