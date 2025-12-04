@@ -3,18 +3,42 @@
 import sys
 import os
 
-def main() -> int:
+import click
+
+
+@click.command()
+@click.option(
+    '--transport',
+    type=click.Choice(['stdio', 'http']),
+    default='stdio',
+    help='Transport method: stdio (default) or http'
+)
+@click.option(
+    '--host',
+    default='127.0.0.1',
+    help='Host to bind for http transport (default: 127.0.0.1)'
+)
+@click.option(
+    '--port',
+    type=int,
+    default=3000,
+    help='Port to bind for http transport (default: 3000)'
+)
+@click.version_option(version='0.1.0', prog_name='finam-mcp')
+def main(transport: str, host: str, port: int) -> None:
     """
-    Main CLI entry point for finam-mcp.
+    Finam MCP Server - Finam Trade API integration for Model Context Protocol.
 
-    Запускает Finam MCP сервер через STDIO транспорт.
+    Запускает Finam MCP сервер для интеграции с Finam Trade API.
     Креденшалы берутся из переменных окружения:
-    - FINAM_API_KEY
-    - FINAM_ACCOUNT_ID
-    - INCLUDE_SERVERS (опционально)
+    - FINAM_API_KEY (обязательно)
+    - FINAM_ACCOUNT_ID (обязательно)
+    - INCLUDE_SERVERS (опционально, например: account,market_data)
 
-    Returns:
-        Exit code (0 for success, 1 for error)
+    Examples:
+        finam-mcp                           # Start with stdio transport
+        finam-mcp --transport http          # Start HTTP server on default port
+        finam-mcp --transport http --port 8000  # Custom port
     """
     # Проверяем наличие обязательных переменных окружения
     api_key = os.getenv("FINAM_API_KEY")
@@ -27,36 +51,45 @@ def main() -> int:
         missing_vars.append("FINAM_ACCOUNT_ID")
 
     if missing_vars:
-        print("Error: Required environment variables are not set:", file=sys.stderr)
+        click.echo("Error: Required environment variables are not set:", err=True)
         for var in missing_vars:
-            print(f"  - {var}", file=sys.stderr)
-        print("\nPlease set the required environment variables and try again.", file=sys.stderr)
-        print("Example:", file=sys.stderr)
-        print("  export FINAM_API_KEY=your_api_key", file=sys.stderr)
-        print("  export FINAM_ACCOUNT_ID=your_account_id", file=sys.stderr)
-        return 1
+            click.echo(f"  - {var}", err=True)
+        click.echo("\nPlease set the required environment variables and try again.", err=True)
+        click.echo("Example:", err=True)
+        click.echo("  export FINAM_API_KEY=your_api_key", err=True)
+        click.echo("  export FINAM_ACCOUNT_ID=your_account_id", err=True)
+        sys.exit(1)
 
     from src.main import finam_mcp
 
     # Показываем информацию о включённых серверах
     include_servers = finam_mcp.include_tags
     if include_servers:
-        print(f"Starting Finam MCP server with enabled modules: {', '.join(include_servers)}", file=sys.stderr)
+        click.echo(f"Starting Finam MCP server with enabled modules: {', '.join(include_servers)}", err=True)
     else:
-        print("Starting Finam MCP server with all modules enabled (account, assets, market_data, order)", file=sys.stderr)
+        click.echo("Starting Finam MCP server with all modules enabled (account, assets, market_data, order)", err=True)
 
-    print("", file=sys.stderr)  # Пустая строка для разделения
+    # Показываем информацию о транспорте
+    if transport == 'http':
+        click.echo(f"Transport: HTTP at http://{host}:{port}", err=True)
+    else:
+        click.echo("Transport: STDIO", err=True)
+
+    click.echo("", err=True)  # Пустая строка для разделения
 
     try:
-        # Запускаем сервер через STDIO (стандартный транспорт для MCP серверов)
-        finam_mcp.run()
-        return 0
+        # Запускаем сервер с выбранным транспортом
+        if transport == 'stdio':
+            finam_mcp.run()
+        else:
+            finam_mcp.run(transport='http', host=host, port=port)
     except KeyboardInterrupt:
-        return 0
+        click.echo("\nServer stopped by user", err=True)
+        sys.exit(0)
     except Exception as e:
-        print(f"Error starting server: {e}", file=sys.stderr)
-        return 1
+        click.echo(f"Error starting server: {e}", err=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

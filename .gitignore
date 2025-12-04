@@ -1,5 +1,4 @@
 /local/
-/src/tradeapi/docs/
 /dist
 /build
 *.egg-info/

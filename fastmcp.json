@@ -1,0 +1,22 @@
+{
+  "$schema": "https://gofastmcp.com/public/schemas/fastmcp.json/v1.json",
+  "source": {
+    "type": "filesystem",
+    "path": "src/main.py",
+    "entrypoint": "finam_mcp"
+  },
+  "environment": {
+    "type": "uv",
+    "python": ">=3.12",
+    "project": "."
+  },
+  "deployment": {
+    "transport": "stdio",
+    "log_level": "INFO",
+    "env": {
+      "FINAM_API_KEY": "${FINAM_API_KEY}",
+      "FINAM_ACCOUNT_ID": "${FINAM_ACCOUNT_ID}",
+      "INCLUDE_SERVERS": "${INCLUDE_SERVERS}"
+    }
+  }
+}
