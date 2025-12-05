@@ -10,25 +10,28 @@ from mcp.server.fastmcp.exceptions import ToolError
 
 from src.tradeapi.models import GetTradesRequest, AssetParamsResponse, GetAccountResponse
 from src.tradeapi.order.orders import OrderClient
+from tradeapi.base import HttpxClient, RequestMethod
 
 
 class FinamClient:
     def __init__(self, api_key, account_id):
-        token_manager = TokenManager(api_key)
-        self.client = Client(token_manager)
-        self.client.orders = OrderClient(token_manager)  # доделка
+        self.token_manager = TokenManager(api_key)
+        self.client = Client(self.token_manager)
+        self.client.orders = OrderClient(self.token_manager)  # доделка
+        self.httpx_client = HttpxClient(self.token_manager)  # доделка
         self.account_id = account_id
 
     @classmethod
     async def create(cls, api_key, account_id):
         instance = cls(api_key, account_id)
-        await instance.client.access_tokens.set_jwt_token()
+        token = await instance._exec_request(RequestMethod.POST, "/sessions", payload={"secret": instance.token_manager.token},)
+        instance.token_manager.set_jwt_token(token["token"])
         return instance
 
     """ Helper """
 
-    async def _exec_request(self, client: BaseClient, method: BaseClient.RequestMethod, url: str, **kwargs) -> dict:
-        response, ok = await client._exec_request(method, url, **kwargs)
+    async def _exec_request(self, method: RequestMethod, url: str, **kwargs) -> dict:
+        response, ok = await self.httpx_client._exec_request(method, url, **kwargs)
 
         if not ok:
             err = ErrorModel(**response)
@@ -39,7 +42,7 @@ class FinamClient:
 
     async def get_account_info(self):
         account_client = self.client.account
-        return GetAccountResponse(**await self._exec_request(account_client, BaseClient.RequestMethod.GET,
+        return GetAccountResponse(**await self._exec_request(RequestMethod.GET,
                                                              f"{account_client._url}/{self.account_id}"))
 
     async def get_transactions(self, start_time: datetime, end_time: datetime, limit: int = 10):
@@ -55,17 +58,13 @@ class FinamClient:
     """ Assets """
 
     async def get_assets(self):
-        assets_client = self.client.assets
-        return AssetsResponse(
-            **await self._exec_request(assets_client, BaseClient.RequestMethod.GET, f"{assets_client._url}"))
+        return AssetsResponse(**await self._exec_request(RequestMethod.GET, f"/assets"))
 
     async def get_asset(self, symbol: str):
         return await self.client.assets.get_asset(symbol, self.account_id)
 
     async def get_asset_params(self, symbol: str):
-        assets_client = self.client.assets
-        return AssetParamsResponse(**await self._exec_request(assets_client, BaseClient.RequestMethod.GET,
-                                                              f"{assets_client._url}/{symbol}/params",
+        return AssetParamsResponse(**await self._exec_request(RequestMethod.GET, f"/assets/{symbol}/params",
                                                               params={"account_id": self.account_id}))
 
     async def get_exchanges(self):
@@ -79,11 +78,8 @@ class FinamClient:
 
     """ Market Data """
 
-    async def get_bars(self, symbol: str, start_time: datetime, end_time: datetime,
-                       timeframe: TimeFrame):
-        market_client = self.client.instruments
-        return BarsResponse(**await self._exec_request(market_client, BaseClient.RequestMethod.GET,
-                                                       f"{market_client._url}/{symbol}/bars",
+    async def get_bars(self, symbol: str, start_time: datetime, end_time: datetime, timeframe: TimeFrame):
+        return BarsResponse(**await self._exec_request(RequestMethod.GET, f"/instruments/{symbol}/bars",
                                                        params={
                                                            "timeframe": timeframe.value,
                                                            "interval.start_time": start_time.isoformat(),
@@ -91,19 +87,13 @@ class FinamClient:
                                                        }, ))
 
     async def get_last_quote(self, symbol: str):
-        market_client = self.client.instruments
-        return QuoteResponse(**await self._exec_request(market_client, BaseClient.RequestMethod.GET,
-                                                        f"{market_client._url}/{symbol}/quotes/latest", ))
+        return QuoteResponse(**await self._exec_request(RequestMethod.GET, f"/instruments/{symbol}/quotes/latest", ))
 
     async def get_last_trades(self, symbol: str):
-        market_client = self.client.instruments
-        return TradesResponse(**await self._exec_request(market_client, BaseClient.RequestMethod.GET,
-                                                         f"{market_client._url}/{symbol}/trades/latest", ))
+        return TradesResponse(**await self._exec_request(RequestMethod.GET, f"/instruments/{symbol}/trades/latest", ))
 
     async def get_order_book(self, symbol: str):
-        market_client = self.client.instruments
-        return OrderBookResponse(**await self._exec_request(market_client, BaseClient.RequestMethod.GET,
-                                                            f"{market_client._url}/{symbol}/orderbook", ))
+        return OrderBookResponse(**await self._exec_request(RequestMethod.GET, f"/instruments/{symbol}/orderbook", ))
 
     """ Orders """
 

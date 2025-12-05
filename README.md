@@ -57,7 +57,7 @@ MCP (Model Context Protocol) сервер для интеграции с тор�
 
 ```bash
 # Установка из PyPI
-uvx finam-mcp-server
+uvx finam-mcp-server@latest
 ```
 
 **Примечание:** Если у вас ещё нет `uv`, установите его сначала и перезапустите терминал, чтобы `uv`/`uvx` стали доступны. См. официальное руководство: https://docs.astral.sh/uv/getting-started/installation/
@@ -73,7 +73,7 @@ uvx finam-mcp-server
   "mcpServers": {
     "finam": {
       "command": "uvx",
-      "args": ["finam-mcp-server"],
+      "args": ["finam-mcp-server@latest"],
       "env": {
         "FINAM_API_KEY": "ваш-api-ключ",
         "FINAM_ACCOUNT_ID": "ваш-account-id"
@@ -271,7 +271,7 @@ finam-mcp/                  ← Рабочая директория (корен�
        "finam": {
          "type": "stdio",
          "command": "uvx",
-         "args": ["finam-mcp-server"],
+         "args": ["finam-mcp-server@latest"],
          "env": {
            "FINAM_API_KEY": "ваш-api-ключ",
            "FINAM_ACCOUNT_ID": "ваш-account-id"
@@ -303,7 +303,7 @@ finam-mcp/                  ← Рабочая директория (корен�
     "finam": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["finam-mcp-server"],
+      "args": ["finam-mcp-server@latest"],
       "env": {
         "FINAM_API_KEY": "ваш-api-ключ",
         "FINAM_ACCOUNT_ID": "ваш-account-id"
@@ -346,7 +346,7 @@ VS Code поддерживает MCP серверы через режим аге
           "finam": {
             "type": "stdio",
             "command": "uvx",
-            "args": ["finam-mcp-server"],
+            "args": ["finam-mcp-server@latest"],
             "env": {
               "FINAM_API_KEY": "ваш-api-ключ",
               "FINAM_ACCOUNT_ID": "ваш-account-id"

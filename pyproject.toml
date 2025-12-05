@@ -39,6 +39,7 @@ dependencies = [
     "click>=8.3.1",
     "fastmcp>=2.13.3",
     "finam-trade-api>=4.1.0",
+    "httpx[http2]>=0.28.1",
 ]
 
 [dependency-groups]

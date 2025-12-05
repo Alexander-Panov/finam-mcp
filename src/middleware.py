@@ -3,7 +3,7 @@ from fastmcp.server.dependencies import get_http_headers
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 
 from src.config import settings
-from src.tradeapi.client import FinamClient
+from src.tradeapi.finam_client import FinamClient
 
 
 class FinamCredentialsMiddleware(Middleware):

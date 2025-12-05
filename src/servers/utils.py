@@ -1,6 +1,6 @@
 from fastmcp.server.dependencies import get_context
 
-from src.tradeapi.client import FinamClient
+from src.tradeapi.finam_client import FinamClient
 
 
 def get_finam_client() -> FinamClient:
