@@ -1,4 +1,4 @@
-"""Finam Trade MCP - действия связанные с торговлей """
+"""Finam Trade MCP - действия связанные с торговлей"""
 
 from fastmcp import FastMCP
 

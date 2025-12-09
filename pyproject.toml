@@ -1,6 +1,6 @@
 [project]
 name = "finam-mcp-server"
-version = "0.1.1"
+version = "0.1.4"
 description = "Finam Trade API integration for Model Context Protocol (MCP)"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -78,3 +78,8 @@ name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
+
+[tool.mypy]
+python_version = 3.12
+strict = true
+ignore_missing_imports = true

@@ -8,10 +8,18 @@ from pydantic import BaseModel, Field, AwareDatetime
 Symbol: type[str] = Annotated[
     str,
     Field(
-        description="symbol в формате: SYMBOL@MIC (например, YDEX@MISX)",
-        pattern=r"^[A-Z0-9]+@[A-Z]+$",  # Regex валидация
-        examples=["YDEX@MISX", "SBER@TQBR"]
-    )
+        description="Symbol in format: TICKER@MIC",
+        pattern=r"^[A-Za-z0-9._-]+@[A-Z_]+$",
+        examples=["YDEX@MISX", "SBER@TQBR"],
+    ),
+]
+
+Timestamp: type[AwareDatetime] = Annotated[
+    AwareDatetime,
+    Field(
+        description="Timestamp in RFC 3339 format (ISO 8601 with timezone)",
+        examples=["2024-01-15T10:30:00Z", "2024-01-15T10:30:00+03:00"],
+    ),
 ]
 
 
@@ -40,7 +48,7 @@ class GetAccountResponse(BaseModel):
     status: str
     positions: list[Position] = Field(default_factory=list)
     cash: list[FinamMoney] = Field(default_factory=list)
-    open_account_date: AwareDatetime
-    first_non_trade_date: AwareDatetime
+    open_account_date: Timestamp
+    first_non_trade_date: Timestamp
     equity: FinamDecimal | None = None
     unrealized_profit: FinamDecimal | None = None

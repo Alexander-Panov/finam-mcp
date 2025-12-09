@@ -1,5 +1,9 @@
 import pytest
-from finam_trade_api.assets import OptionsChainResponse, AssetsResponse, ExchangesResponse
+from finam_trade_api.assets import (
+    OptionsChainResponse,
+    AssetsResponse,
+    ExchangesResponse,
+)
 
 from conftest import TEST_STOCK_SYMBOLS
 
@@ -21,10 +25,7 @@ async def test_get_exchanges(mcp_client):
 @pytest.mark.parametrize("symbol", TEST_STOCK_SYMBOLS)
 async def test_get_options_chain(mcp_client, symbol):
     response = await mcp_client.call_tool(
-        "assets_get_options_chain",
-        arguments={
-            "symbol": symbol
-        }
+        "assets_get_options_chain", arguments={"symbol": symbol}
     )
 
     assert response.is_error is False

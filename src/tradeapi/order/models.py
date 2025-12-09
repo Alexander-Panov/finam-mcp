@@ -9,12 +9,14 @@ from src.tradeapi.models import Symbol
 
 class Side(str, Enum):
     """Сторона сделки"""
+
     BUY = "SIDE_BUY"
     SELL = "SIDE_SELL"
 
 
 class OrderType(str, Enum):
     """Тип заявки"""
+
     UNSPECIFIED = "ORDER_TYPE_UNSPECIFIED"
     MARKET = "ORDER_TYPE_MARKET"
     LIMIT = "ORDER_TYPE_LIMIT"
@@ -25,6 +27,7 @@ class OrderType(str, Enum):
 
 class TimeInForce(str, Enum):
     """Срок действия заявки"""
+
     UNSPECIFIED = "TIME_IN_FORCE_UNSPECIFIED"
     DAY = "TIME_IN_FORCE_DAY"
     GOOD_TILL_CANCEL = "TIME_IN_FORCE_GOOD_TILL_CANCEL"
@@ -38,6 +41,7 @@ class TimeInForce(str, Enum):
 
 class StopCondition(str, Enum):
     """Условие срабатывания стоп заявки"""
+
     UNSPECIFIED = "STOP_CONDITION_UNSPECIFIED"
     LAST_UP = "STOP_CONDITION_LAST_UP"
     LAST_DOWN = "STOP_CONDITION_LAST_DOWN"
@@ -45,6 +49,7 @@ class StopCondition(str, Enum):
 
 class ValidBefore(str, Enum):
     """Срок действия условной заявки"""
+
     UNSPECIFIED = "VALID_BEFORE_UNSPECIFIED"
     END_OF_DAY = "VALID_BEFORE_END_OF_DAY"
     GOOD_TILL_CANCEL = "VALID_BEFORE_GOOD_TILL_CANCEL"
@@ -53,6 +58,7 @@ class ValidBefore(str, Enum):
 
 class OrderStatus(str, Enum):
     """Статус заявки"""
+
     UNSPECIFIED = "ORDER_STATUS_UNSPECIFIED"
     NEW = "ORDER_STATUS_NEW"
     PARTIALLY_FILLED = "ORDER_STATUS_PARTIALLY_FILLED"
@@ -86,6 +92,7 @@ class OrderStatus(str, Enum):
 
 class Leg(BaseModel):
     """Лег для мульти лег заявки"""
+
     symbol: Symbol
     quantity: Decimal = Field(..., description="Количество")
     side: Side = Field(..., description="Сторона")
@@ -93,32 +100,49 @@ class Leg(BaseModel):
 
 class Order(BaseModel):
     """Информация о заявке"""
+
     symbol: Symbol
     quantity: Decimal = Field(description="Количество в шт.")
     side: Side = Field(description="Сторона (long или short)")
     type: OrderType = Field(description="Тип заявки")
-    time_in_force: TimeInForce = Field(TimeInForce.UNSPECIFIED, description="Срок действия заявки")
-    limit_price: Decimal | None = Field(None, description="Необходимо для лимитной и стоп лимитной заявки")
-    stop_price: Decimal | None = Field(None, description="Необходимо для стоп рыночной и стоп лимитной заявки")
-    stop_condition: StopCondition = Field(StopCondition.UNSPECIFIED, description="Необходимо для стоп рыночной и стоп лимитной заявки")
+    time_in_force: TimeInForce = Field(
+        TimeInForce.UNSPECIFIED, description="Срок действия заявки"
+    )
+    limit_price: Decimal | None = Field(
+        None, description="Необходимо для лимитной и стоп лимитной заявки"
+    )
+    stop_price: Decimal | None = Field(
+        None, description="Необходимо для стоп рыночной и стоп лимитной заявки"
+    )
+    stop_condition: StopCondition = Field(
+        StopCondition.UNSPECIFIED,
+        description="Необходимо для стоп рыночной и стоп лимитной заявки",
+    )
     legs: list[Leg] | None = Field(None, description="Необходимо для мульти лег заявки")
-    client_order_id: str | None = Field(None, max_length=20, description="Уникальный идентификатор заявки")
-    valid_before: ValidBefore | None = Field(None, description="Срок действия условной заявки")
+    client_order_id: str | None = Field(
+        None, max_length=20, description="Уникальный идентификатор заявки"
+    )
+    valid_before: ValidBefore | None = Field(
+        None, description="Срок действия условной заявки"
+    )
     comment: str | None = Field(None, max_length=128, description="Метка заявки")
 
 
 class OrderState(BaseModel):
     """Состояние заявки"""
+
     order_id: str = Field(..., description="Идентификатор заявки")
     exec_id: str | None = Field(None, description="Идентификатор исполнения")
     status: OrderStatus = Field(..., description="Статус заявки")
     order: Order = Field(..., description="Заявка")
-    transact_at: datetime | None = Field(None, description="Дата и время выставления заявки")
+    transact_at: datetime | None = Field(
+        None, description="Дата и время выставления заявки"
+    )
     accept_at: datetime | None = Field(None, description="Дата и время принятия заявки")
     withdraw_at: datetime | None = Field(None, description="Дата и время отмены заявки")
 
 
 class OrdersResponse(BaseModel):
     """Список торговых заявок"""
-    orders: list[OrderState] = Field(..., description="Заявки")
 
+    orders: list[OrderState] = Field(..., description="Заявки")

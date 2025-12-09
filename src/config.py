@@ -21,8 +21,12 @@ class Settings(BaseSettings):
                 return v
         return None
 
-    model_config = SettingsConfigDict(case_sensitive=True, env_file=PROJECT_PATH / ".env", env_file_encoding="utf-8",
-                                      extra="ignore")
+    model_config = SettingsConfigDict(
+        case_sensitive=True,
+        env_file=PROJECT_PATH / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
 
 settings = Settings()

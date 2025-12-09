@@ -26,10 +26,7 @@ class FinamCredentialsMiddleware(Middleware):
             )
 
         # Создаем клиент Finam
-        finam_client = await FinamClient.create(
-            api_key=api_key,
-            account_id=account_id
-        )
+        finam_client = await FinamClient.create(api_key=api_key, account_id=account_id)
 
         # Сохраняем клиента в state контекста
         if context.fastmcp_context:

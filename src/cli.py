@@ -1,30 +1,33 @@
 """CLI entry point for finam-mcp server."""
+import asyncio
 
 import sys
 import os
 
 import click
 
+from src.tradeapi.finam_client import FinamClient
+
 
 @click.command()
 @click.option(
-    '--transport',
-    type=click.Choice(['stdio', 'http']),
-    default='stdio',
-    help='Transport method: stdio (default) or http'
+    "--transport",
+    type=click.Choice(["stdio", "http"]),
+    default="stdio",
+    help="Transport method: stdio (default) or http",
 )
 @click.option(
-    '--host',
-    default='127.0.0.1',
-    help='Host to bind for http transport (default: 127.0.0.1)'
+    "--host",
+    default="127.0.0.1",
+    help="Host to bind for http transport (default: 127.0.0.1)",
 )
 @click.option(
-    '--port',
+    "--port",
     type=int,
     default=3000,
-    help='Port to bind for http transport (default: 3000)'
+    help="Port to bind for http transport (default: 3000)",
 )
-@click.version_option(version='0.1.0', prog_name='finam-mcp')
+@click.version_option(version="0.1.0", prog_name="finam-mcp")
 def main(transport: str, host: str, port: int) -> None:
     """
     Finam MCP Server - Finam Trade API integration for Model Context Protocol.
@@ -54,10 +57,26 @@ def main(transport: str, host: str, port: int) -> None:
         click.echo("Error: Required environment variables are not set:", err=True)
         for var in missing_vars:
             click.echo(f"  - {var}", err=True)
-        click.echo("\nPlease set the required environment variables and try again.", err=True)
+        click.echo(
+            "\nPlease set the required environment variables and try again.", err=True
+        )
         click.echo("Example:", err=True)
         click.echo("  export FINAM_API_KEY=your_api_key", err=True)
         click.echo("  export FINAM_ACCOUNT_ID=your_account_id", err=True)
+        sys.exit(1)
+
+    # Проверка токена
+    async def verify_token():
+        """Асинхронная проверка токена."""
+        client = await FinamClient.create(api_key=api_key, account_id=account_id)
+        details = await client.get_jwt_token_details()
+        if account_id not in details.account_ids:
+            raise RuntimeError(f"Account ID {account_id} not found.")
+
+    try:
+        asyncio.run(verify_token())
+    except Exception as err:
+        click.echo(f"Error: {err}", err=True)
         sys.exit(1)
 
     from src.main import finam_mcp
@@ -65,12 +84,18 @@ def main(transport: str, host: str, port: int) -> None:
     # Показываем информацию о включённых серверах
     include_servers = finam_mcp.include_tags
     if include_servers:
-        click.echo(f"Starting Finam MCP server with enabled modules: {', '.join(include_servers)}", err=True)
+        click.echo(
+            f"Starting Finam MCP server with enabled modules: {', '.join(include_servers)}",
+            err=True,
+        )
     else:
-        click.echo("Starting Finam MCP server with all modules enabled (account, assets, market_data, order)", err=True)
+        click.echo(
+            "Starting Finam MCP server with all modules enabled (account, assets, market_data, order)",
+            err=True,
+        )
 
     # Показываем информацию о транспорте
-    if transport == 'http':
+    if transport == "http":
         click.echo(f"Transport: HTTP at http://{host}:{port}", err=True)
     else:
         click.echo("Transport: STDIO", err=True)
@@ -79,10 +104,10 @@ def main(transport: str, host: str, port: int) -> None:
 
     try:
         # Запускаем сервер с выбранным транспортом
-        if transport == 'stdio':
+        if transport == "stdio":
             finam_mcp.run()
         else:
-            finam_mcp.run(transport='http', host=host, port=port)
+            finam_mcp.run(transport="http", host=host, port=port)
     except KeyboardInterrupt:
         click.echo("\nServer stopped by user", err=True)
         sys.exit(0)

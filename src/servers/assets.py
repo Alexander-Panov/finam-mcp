@@ -1,6 +1,12 @@
 from fastmcp import FastMCP
-from finam_trade_api.assets import AssetsResponse, AssetResponse, ExchangesResponse, AssetParamsResponse, \
-    ScheduleResponse, OptionsChainResponse
+from finam_trade_api.assets import (
+    AssetsResponse,
+    AssetResponse,
+    ExchangesResponse,
+    AssetParamsResponse,
+    ScheduleResponse,
+    OptionsChainResponse,
+)
 
 from src.servers.utils import get_finam_client
 from src.tradeapi.models import Symbol

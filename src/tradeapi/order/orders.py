@@ -20,7 +20,9 @@ class OrderClient(BaseClient):
 
         if not ok:
             err = ErrorModel(**response)
-            raise FinamTradeApiError(f"code={err.code} | message={err.message} | details={err.details}")
+            raise FinamTradeApiError(
+                f"code={err.code} | message={err.message} | details={err.details}"
+            )
 
         return OrdersResponse(**response)
 
@@ -33,14 +35,18 @@ class OrderClient(BaseClient):
 
         if not ok:
             err = ErrorModel(**response)
-            raise FinamTradeApiError(f"code={err.code} | message={err.message} | details={err.details}")
+            raise FinamTradeApiError(
+                f"code={err.code} | message={err.message} | details={err.details}"
+            )
 
         return OrderState(**response)
 
     async def place_order(self, order: Order, account_id: str) -> OrderState:
         """Выставление биржевой заявки"""
-        order_body = {key: ({"value": str(value)} if isinstance(value, Decimal) else value) for key, value in
-                      order.model_dump(exclude_unset=True).items()}
+        order_body = {
+            key: ({"value": str(value)} if isinstance(value, Decimal) else value)
+            for key, value in order.model_dump(exclude_unset=True).items()
+        }
         response, ok = await self._exec_request(
             self.RequestMethod.POST,
             self._url.format(account_id=account_id),
@@ -49,7 +55,9 @@ class OrderClient(BaseClient):
 
         if not ok:
             err = ErrorModel(**response)
-            raise FinamTradeApiError(f"code={err.code} | message={err.message} | details={err.details}")
+            raise FinamTradeApiError(
+                f"code={err.code} | message={err.message} | details={err.details}"
+            )
 
         return OrderState(**response)
 
@@ -62,6 +70,8 @@ class OrderClient(BaseClient):
 
         if not ok:
             err = ErrorModel(**response)
-            raise FinamTradeApiError(f"code={err.code} | message={err.message} | details={err.details}")
+            raise FinamTradeApiError(
+                f"code={err.code} | message={err.message} | details={err.details}"
+            )
 
         return OrderState(**response)
