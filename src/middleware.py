@@ -3,7 +3,7 @@ from fastmcp.server.dependencies import get_http_headers
 from fastmcp.server.middleware import Middleware, MiddlewareContext
 
 from src.config import settings
-from src.tradeapi.finam_client import FinamClient
+from src.utils import create_finam_client
 
 
 class FinamCredentialsMiddleware(Middleware):
@@ -26,7 +26,12 @@ class FinamCredentialsMiddleware(Middleware):
             )
 
         # Создаем клиент Finam
-        finam_client = await FinamClient.create(api_key=api_key, account_id=account_id)
+        try:
+            finam_client = await create_finam_client(
+                api_key=api_key, account_id=account_id
+            )
+        except Exception as e:
+            raise ToolError(str(e)) from e
 
         # Сохраняем клиента в state контекста
         if context.fastmcp_context:

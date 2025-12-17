@@ -1,4 +1,5 @@
 """E2E tests for CLI module."""
+
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -19,7 +20,9 @@ class TestCLIMissingEnvVars:
 
     def test_missing_api_key(self, cli_runner):
         """Test CLI fails when FINAM_API_KEY is not set."""
-        result = cli_runner.invoke(main, env={"FINAM_ACCOUNT_ID": "test_account_123"}, catch_exceptions=False)
+        result = cli_runner.invoke(
+            main, env={"FINAM_ACCOUNT_ID": "test_account_123"}, catch_exceptions=False
+        )
 
         assert result.exit_code == 1
         assert "Error: Required environment variables are not set:" in result.output
@@ -27,7 +30,9 @@ class TestCLIMissingEnvVars:
 
     def test_missing_account_id(self, cli_runner):
         """Test CLI fails when FINAM_ACCOUNT_ID is not set."""
-        result = cli_runner.invoke(main, env={"FINAM_API_KEY": "test_api_key"}, catch_exceptions=False)
+        result = cli_runner.invoke(
+            main, env={"FINAM_API_KEY": "test_api_key"}, catch_exceptions=False
+        )
 
         assert result.exit_code == 1
         assert "Error: Required environment variables are not set:" in result.output
@@ -49,10 +54,14 @@ class TestCLIInvalidToken:
 
     def test_invalid_api_key(self, cli_runner):
         """Test CLI fails when API key is invalid."""
-        result = cli_runner.invoke(main, env={
-            "FINAM_API_KEY": "invalid_key_12345",
-            "FINAM_ACCOUNT_ID": "test_account_123"
-        }, catch_exceptions=False)
+        result = cli_runner.invoke(
+            main,
+            env={
+                "FINAM_API_KEY": "invalid_key_12345",
+                "FINAM_ACCOUNT_ID": "test_account_123",
+            },
+            catch_exceptions=False,
+        )
 
         assert result.exit_code == 1
         assert "Error: Api token could not be verified" in result.output
@@ -62,10 +71,14 @@ class TestCLIInvalidToken:
         if not settings.FINAM_API_KEY:
             pytest.skip("FINAM_API_KEY not set in settings")
 
-        result = cli_runner.invoke(main, env={
-            "FINAM_API_KEY": settings.FINAM_API_KEY,
-            "FINAM_ACCOUNT_ID": "999999999"
-        }, catch_exceptions=False)
+        result = cli_runner.invoke(
+            main,
+            env={
+                "FINAM_API_KEY": settings.FINAM_API_KEY,
+                "FINAM_ACCOUNT_ID": "999999999",
+            },
+            catch_exceptions=False,
+        )
 
         assert result.exit_code == 1
         assert "Error: Account ID 999999999 not found." in result.output
@@ -78,7 +91,7 @@ class TestCLISuccessfulLaunch:
     def env(self):
         return {
             "FINAM_API_KEY": settings.FINAM_API_KEY,
-            "FINAM_ACCOUNT_ID": settings.FINAM_ACCOUNT_ID
+            "FINAM_ACCOUNT_ID": settings.FINAM_ACCOUNT_ID,
         }
 
     @patch("src.main.finam_mcp")
@@ -92,10 +105,7 @@ class TestCLISuccessfulLaunch:
         mock_finam_mcp.run = MagicMock()
 
         result = cli_runner.invoke(
-            main,
-            ["--transport", "stdio"],
-            env=env,
-            catch_exceptions=False
+            main, ["--transport", "stdio"], env=env, catch_exceptions=False
         )
 
         assert result.exit_code == 0
@@ -114,19 +124,14 @@ class TestCLISuccessfulLaunch:
         mock_finam_mcp.run = MagicMock()
 
         result = cli_runner.invoke(
-            main,
-            ["--transport", "http"],
-            env=env,
-            catch_exceptions=False
+            main, ["--transport", "http"], env=env, catch_exceptions=False
         )
 
         assert result.exit_code == 0
         assert "Starting Finam MCP server" in result.output
         assert "Transport: HTTP at http://127.0.0.1:3000" in result.output
         mock_finam_mcp.run.assert_called_once_with(
-            transport="http",
-            host="127.0.0.1",
-            port=3000
+            transport="http", host="127.0.0.1", port=3000
         )
 
     @patch("src.main.finam_mcp")
@@ -143,14 +148,12 @@ class TestCLISuccessfulLaunch:
             main,
             ["--transport", "http", "--host", "0.0.0.0", "--port", "8000"],
             env=env,
-            catch_exceptions=False
+            catch_exceptions=False,
         )
 
         assert result.exit_code == 0
         assert "Starting Finam MCP server" in result.output
         assert "Transport: HTTP at http://0.0.0.0:8000" in result.output
         mock_finam_mcp.run.assert_called_once_with(
-            transport="http",
-            host="0.0.0.0",
-            port=8000
+            transport="http", host="0.0.0.0", port=8000
         )

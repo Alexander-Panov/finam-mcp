@@ -9,7 +9,7 @@ from conftest import TEST_STOCK_SYMBOLS
 
 
 async def test_get_assets(mcp_client):
-    response = await mcp_client.call_tool("assets_get_list")
+    response = await mcp_client.call_tool("assets_get_assets")
     assert response.is_error is False
     assets = AssetsResponse.model_validate(response.structured_content)
     assert assets.assets

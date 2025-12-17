@@ -10,7 +10,7 @@ account_mcp = FastMCP(name="FinamAccountServer")
 
 
 @account_mcp.tool(tags={"account"})
-async def get_info() -> GetAccountResponse:
+async def get_account_info() -> GetAccountResponse:
     """Получение информации по конкретному счету (статус и тип аккаунта, доступные средства, дневная прибыль, открытые позиции (количество, средняя цена, прибыль/убыток), тип портфеля)"""
     return await get_finam_client().get_account_info()
 

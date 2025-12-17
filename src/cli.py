@@ -1,12 +1,12 @@
 """CLI entry point for finam-mcp server."""
-import asyncio
 
-import sys
+import asyncio
 import os
 
 import click
+import sys
 
-from src.tradeapi.finam_client import FinamClient
+from src.utils import create_finam_client
 
 
 @click.command()
@@ -65,16 +65,8 @@ def main(transport: str, host: str, port: int) -> None:
         click.echo("  export FINAM_ACCOUNT_ID=your_account_id", err=True)
         sys.exit(1)
 
-    # Проверка токена
-    async def verify_token():
-        """Асинхронная проверка токена."""
-        client = await FinamClient.create(api_key=api_key, account_id=account_id)
-        details = await client.get_jwt_token_details()
-        if account_id not in details.account_ids:
-            raise RuntimeError(f"Account ID {account_id} not found.")
-
     try:
-        asyncio.run(verify_token())
+        asyncio.run(create_finam_client(api_key, account_id))
     except Exception as err:
         click.echo(f"Error: {err}", err=True)
         sys.exit(1)

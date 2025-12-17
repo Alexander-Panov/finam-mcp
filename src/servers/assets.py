@@ -15,7 +15,7 @@ assets_mcp = FastMCP(name="FinamAssetsServer")
 
 
 @assets_mcp.tool(tags={"assets"})
-async def get(symbol: Symbol) -> AssetResponse:
+async def get_asset(symbol: Symbol) -> AssetResponse:
     """Получение информации по конкретному инструменту (лот, шаг цены, дата экспирации фьючерса)"""
     return await get_finam_client().get_asset(symbol)
 
@@ -27,7 +27,7 @@ async def get_params(symbol: Symbol) -> AssetParamsResponse:
 
 
 @assets_mcp.tool(tags={"assets"})
-async def get_list() -> AssetsResponse:
+async def get_assets() -> AssetsResponse:
     """Получение списка доступных инструментов, их описание (символы, наименование)"""
     return await get_finam_client().get_assets()
 
