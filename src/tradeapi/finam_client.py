@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from finam_trade_api import Client, TokenManager, ErrorModel
+from finam_trade_api import Client, ErrorModel
 from finam_trade_api.access import TokenDetailsResponse
 from finam_trade_api.account import GetTransactionsRequest
 from finam_trade_api.assets import AssetsResponse
@@ -14,7 +14,7 @@ from finam_trade_api.instruments import (
 from mcp.server.auth.middleware.client_auth import AuthenticationError
 from mcp.server.fastmcp.exceptions import ToolError
 
-from src.tradeapi.base import HttpxClient, RequestMethod
+from src.tradeapi.base import HttpxClient, RequestMethod, TokenManager
 from src.tradeapi.models import (
     GetTradesRequest,
     AssetParamsResponse,

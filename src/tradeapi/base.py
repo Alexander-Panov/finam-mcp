@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Any
 
 import httpx
-from finam_trade_api import TokenManager
 
 
 class RequestMethod(str, Enum):
@@ -16,6 +15,55 @@ class RequestMethod(str, Enum):
     DELETE = "delete"
 
 
+class TokenManager:
+    """
+    Класс для управления токенами, включая основной токен и JWT-токен.
+
+    Атрибуты:
+        _token (str): Основной токен, передаваемый при инициализации.
+        _jwt_token (str | None): JWT-токен, который может быть установлен позже.
+    """
+
+    def __init__(self, token: str):
+        """
+        Инициализирует экземпляр TokenManager с основным токеном.
+
+        Параметры:
+            token (str): Основной токен, используемый для аутентификации.
+        """
+        self._token = token
+        self._jwt_token: str | None = None
+
+    @property
+    def token(self) -> str:
+        """
+        Возвращает основной токен.
+
+        Возвращает:
+            str: Основной токен.
+        """
+        return self._token
+
+    @property
+    def jwt_token(self) -> str | None:
+        """
+        Возвращает текущий JWT-токен.
+
+        Возвращает:
+            str | None: JWT-токен, если он установлен, иначе None.
+        """
+        return self._jwt_token
+
+    def set_jwt_token(self, jwt_token: str):
+        """
+        Устанавливает значение JWT-токена.
+
+        Параметры:
+            jwt_token (str): Новый JWT-токен.
+        """
+        self._jwt_token = jwt_token
+
+
 class HttpxClient:
     """
     Базовый клиент для выполнения HTTP-запросов с использованием токенов аутентификации.
@@ -26,7 +74,7 @@ class HttpxClient:
     """
 
     def __init__(
-        self, token_manager: TokenManager, url: str = "https://api.finam.ru/v1"
+            self, token_manager: TokenManager, url: str = "https://api.finam.ru/v1"
     ):
         self._token_manager = token_manager
         self._base_url = url
@@ -40,12 +88,12 @@ class HttpxClient:
         )
 
     async def _exec_request(
-        self, method: str, url: str, payload=None, **kwargs
+            self, method: str, url: str, payload=None, **kwargs
     ) -> tuple[Any, bool]:
         uri = f"{self._base_url}{url}"
 
         async with httpx.AsyncClient(
-            http2=True, timeout=20, headers=self._auth_headers
+                http2=True, timeout=20, headers=self._auth_headers
         ) as client:
             response = await client.request(method, uri, json=payload, **kwargs)
 

@@ -43,33 +43,34 @@ def main(transport: str, host: str, port: int) -> None:
         finam-mcp --transport http          # Start HTTP server on default port
         finam-mcp --transport http --port 8000  # Custom port
     """
-    # Проверяем наличие обязательных переменных окружения
-    api_key = os.getenv("FINAM_API_KEY")
-    account_id = os.getenv("FINAM_ACCOUNT_ID")
+    # Проверяем наличие обязательных переменных окружения (для локального сервера stdio)
+    if transport == "stdio":
+        api_key = os.getenv("FINAM_API_KEY")
+        account_id = os.getenv("FINAM_ACCOUNT_ID")
 
-    missing_vars = []
-    if not api_key:
-        missing_vars.append("FINAM_API_KEY")
-    if not account_id:
-        missing_vars.append("FINAM_ACCOUNT_ID")
+        missing_vars = []
+        if not api_key:
+            missing_vars.append("FINAM_API_KEY")
+        if not account_id:
+            missing_vars.append("FINAM_ACCOUNT_ID")
 
-    if missing_vars:
-        click.echo("Error: Required environment variables are not set:", err=True)
-        for var in missing_vars:
-            click.echo(f"  - {var}", err=True)
-        click.echo(
-            "\nPlease set the required environment variables and try again.", err=True
-        )
-        click.echo("Example:", err=True)
-        click.echo("  export FINAM_API_KEY=your_api_key", err=True)
-        click.echo("  export FINAM_ACCOUNT_ID=your_account_id", err=True)
-        sys.exit(1)
+        if missing_vars:
+            click.echo("Error: Required environment variables are not set:", err=True)
+            for var in missing_vars:
+                click.echo(f"  - {var}", err=True)
+            click.echo(
+                "\nPlease set the required environment variables and try again.", err=True
+            )
+            click.echo("Example:", err=True)
+            click.echo("  export FINAM_API_KEY=your_api_key", err=True)
+            click.echo("  export FINAM_ACCOUNT_ID=your_account_id", err=True)
+            sys.exit(1)
 
-    try:
-        asyncio.run(create_finam_client(api_key, account_id))
-    except Exception as err:
-        click.echo(f"Error: {err}", err=True)
-        sys.exit(1)
+        try:
+            asyncio.run(create_finam_client(api_key, account_id))
+        except Exception as err:
+            click.echo(f"Error: {err}", err=True)
+            sys.exit(1)
 
     from src.main import finam_mcp
 

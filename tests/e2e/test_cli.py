@@ -114,7 +114,7 @@ class TestCLISuccessfulLaunch:
         mock_finam_mcp.run.assert_called_once_with()
 
     @patch("src.main.finam_mcp")
-    def test_successful_launch_http_default_port(self, mock_finam_mcp, cli_runner, env):
+    def test_successful_launch_http_default_port(self, mock_finam_mcp, cli_runner):
         """Test successful CLI launch with HTTP transport on default port."""
         if not settings.FINAM_API_KEY or not settings.FINAM_ACCOUNT_ID:
             pytest.skip("FINAM_API_KEY or FINAM_ACCOUNT_ID not set in settings")
@@ -123,8 +123,9 @@ class TestCLISuccessfulLaunch:
         mock_finam_mcp.include_tags = []
         mock_finam_mcp.run = MagicMock()
 
+        # пустые env переменные при запуске в http режиме не должны вызывать ошибку
         result = cli_runner.invoke(
-            main, ["--transport", "http"], env=env, catch_exceptions=False
+            main, ["--transport", "http"], env={}, catch_exceptions=False
         )
 
         assert result.exit_code == 0
