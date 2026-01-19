@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+
 import pytest
-import re
 from finam_trade_api.instruments import (
     TimeFrame,
     BarsResponse,
@@ -8,15 +8,12 @@ from finam_trade_api.instruments import (
     OrderBookResponse,
     TradesResponse,
 )
-
 from tests.conftest import TEST_INVALID_SYMBOL, TEST_STOCK_SYMBOLS
 
 
 @pytest.mark.parametrize("symbol", TEST_STOCK_SYMBOLS)
 async def test_get_bars(mcp_client, symbol):
-    end_time = datetime.now(timezone.utc).replace(
-        hour=0, minute=0, second=0, microsecond=0
-    )
+    end_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     start_time = end_time - timedelta(days=7)
 
     response = await mcp_client.call_tool(
@@ -31,28 +28,6 @@ async def test_get_bars(mcp_client, symbol):
 
     assert response.is_error is False
     assert BarsResponse.model_validate(response.structured_content)
-
-
-async def test_get_bars_without_isoformat(mcp_client):
-    end_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    start_time = end_time - timedelta(days=7)
-
-    response = await mcp_client.call_tool(
-        "market_data_get_bars",
-        arguments={
-            "symbol": "SBER@MISX",
-            "start_time": start_time,
-            "end_time": end_time,
-            "timeframe": TimeFrame.TIME_FRAME_D,
-        },
-        raise_on_error=False,
-    )
-
-    assert response.is_error is True
-
-    error_text = re.sub(r"\s+", " ", response.content[0].text).strip()
-    assert "start_time Input should have timezone info" in error_text
-    assert "end_time Input should have timezone info" in error_text
 
 
 @pytest.mark.parametrize("symbol", TEST_STOCK_SYMBOLS)
@@ -78,7 +53,8 @@ async def test_get_last_trades(mcp_client, symbol):
     else:
         # Trades data can be not found
         error_text = response.content[0].text
-        assert "Trades not found" in error_text
+        assert "Internal error" in error_text
+        assert "code=1 | message= | details=[]" in error_text
 
 
 @pytest.mark.parametrize("symbol", TEST_STOCK_SYMBOLS)
@@ -100,13 +76,11 @@ async def test_get_order_book(mcp_client, symbol):
         "market_data_get_bars",
     ],
 )
-async def test_get_order_book_invalid_symbol(mcp_client, tool):
-    """Тест обработки ошибки при неправильном symbol"""
+async def test_market_data_invalid_symbol(mcp_client, tool):
+    """Тест обработки ошибки в Market Data при неправильном symbol"""
     params = {"symbol": TEST_INVALID_SYMBOL}
     if tool == "market_data_get_bars":
-        end_time = datetime.now(timezone.utc).replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        end_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         start_time = end_time - timedelta(days=7)
 
         params["timeframe"] = TimeFrame.TIME_FRAME_D

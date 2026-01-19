@@ -74,7 +74,7 @@ class HttpxClient:
     """
 
     def __init__(
-            self, token_manager: TokenManager, url: str = "https://api.finam.ru/v1"
+        self, token_manager: TokenManager, url: str = "https://api.finam.ru/v1"
     ):
         self._token_manager = token_manager
         self._base_url = url
@@ -88,12 +88,12 @@ class HttpxClient:
         )
 
     async def _exec_request(
-            self, method: str, url: str, payload=None, **kwargs
+        self, method: str, url: str, payload=None, **kwargs
     ) -> tuple[Any, bool]:
         uri = f"{self._base_url}{url}"
 
         async with httpx.AsyncClient(
-                http2=True, timeout=20, headers=self._auth_headers
+            http2=True, timeout=20, headers=self._auth_headers
         ) as client:
             response = await client.request(method, uri, json=payload, **kwargs)
 

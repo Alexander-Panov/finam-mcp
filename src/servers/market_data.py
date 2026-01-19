@@ -1,5 +1,7 @@
 """Finam Market MCP - действия связанные с получением рыночных данных"""
 
+from datetime import datetime
+
 from fastmcp import FastMCP
 from finam_trade_api.instruments import (
     BarsResponse,
@@ -8,16 +10,15 @@ from finam_trade_api.instruments import (
     TimeFrame,
     TradesResponse,
 )
-
 from src.servers.utils import get_finam_client
-from src.tradeapi.models import Symbol, Timestamp
+from src.tradeapi.models import Symbol
 
 market_data_mcp = FastMCP(name="FinamMarketDataServer")
 
 
 @market_data_mcp.tool(tags={"market_data"})
 async def get_bars(
-    symbol: Symbol, start_time: Timestamp, end_time: Timestamp, timeframe: TimeFrame
+    symbol: Symbol, start_time: datetime, end_time: datetime, timeframe: TimeFrame
 ) -> BarsResponse:
     """Получение исторических данных по инструменту (агрегированные свечи)"""
     return await get_finam_client().get_bars(symbol, start_time, end_time, timeframe)

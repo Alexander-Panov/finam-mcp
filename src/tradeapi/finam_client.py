@@ -145,8 +145,8 @@ class FinamClient:
                 f"/instruments/{symbol}/bars",
                 params={
                     "timeframe": timeframe.value,
-                    "interval.start_time": start_time.isoformat(),
-                    "interval.end_time": end_time.isoformat(),
+                    "interval.start_time": start_time.astimezone().isoformat(),
+                    "interval.end_time": end_time.astimezone().isoformat(),
                 },
             )
         )

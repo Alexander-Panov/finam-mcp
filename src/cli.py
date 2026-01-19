@@ -59,7 +59,8 @@ def main(transport: str, host: str, port: int) -> None:
             for var in missing_vars:
                 click.echo(f"  - {var}", err=True)
             click.echo(
-                "\nPlease set the required environment variables and try again.", err=True
+                "\nPlease set the required environment variables and try again.",
+                err=True,
             )
             click.echo("Example:", err=True)
             click.echo("  export FINAM_API_KEY=your_api_key", err=True)

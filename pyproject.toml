@@ -1,6 +1,6 @@
 [project]
 name = "finam-mcp-server"
-version = "0.1.5"
+version = "0.1.6"
 description = "Finam Trade API integration for Model Context Protocol (MCP)"
 readme = "README.md"
 requires-python = ">=3.12"
